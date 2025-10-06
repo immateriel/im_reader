@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="<%= I18n.locale.to_s %>">
+<head>
+  <%= favicon_link_tag %>
+
+  <!-- Main css styles -->
+  <%= stylesheet_link_tag "reader" %>
+  <script src="<%= asset_path('jszip.min.js') %>"></script>
+  <script src="<%= asset_path('epub.min.js') %>"></script>
+
+  <!-- Main javascript files -->
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => false %>
+
+  <script src="<%= asset_path('reader.js') %>"></script>
+
+  <%= yield :head %>
+
+  <title><%= Immateriel.env_title %>immatériel reader</title>
+
+  <%= csrf_meta_tags %>
+</head>
+
+<body>
+
+<div id="epub_reader_container">
+  <%= yield %>
+</div>
+<%= javascript_include_tag params[:controller] if ::Rails.application.assets_manifest.assets["#{params[:controller]}.js"] %>
+</body>
+</html>

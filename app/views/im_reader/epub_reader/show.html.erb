@@ -1,0 +1,32 @@
+<div id="reader-root" data-book-url="<%= @url %>">
+  <aside class="ui vertical menu">
+    <div class="item logo">
+      <%= image_tag 'icons/logo_colore.svg', id: "logo" %>
+    </div>
+    <div class="header"><%= "Table of content".t %></div>
+    <div class="menu" id="toc"></div>
+  </aside>
+
+  <section>
+    <div class="ui grid">
+      <div class="three wide column center aligned">
+        <button id="prev_button" class="ui circular icon button">
+          <i class="angle left icon"></i>
+        </button>
+      </div>
+      <div class="ten wide column" id="progress_bar_container">
+        <div id="progressBar" class="ui tiny red indicating progress" data-percent="0">
+          <div class="bar"></div>
+        </div>
+      </div>
+      <div class="three wide column center aligned">
+        <button id="next_button" class="ui circular icon button">
+          <i class="angle right icon"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="viewer">
+    </div>
+  </section>
+</div>
