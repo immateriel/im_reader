@@ -3,7 +3,8 @@ module ImReader
 
     def show
       @remote_url = params[:url]
-      @url = remote_epub_reader_path(url: @remote_url)
+      puts "#### PLOP ####"
+      @url = im_reader.remote_epub_reader_url(url: @remote_url)
       puts "***** OK *****"
     end
 
@@ -13,9 +14,9 @@ module ImReader
       puts "***** REMOTE 1 *****"
       url = params[:url]
       uri = URI.parse(url)
+      response = fetch_with_redirect(uri)
 
       # on télécharge directement en mémoire
-      response = Net::HTTP.get_response(uri)
       puts "***** REMOTE 2 *****"
 
       if response.is_a?(Net::HTTPSuccess)
@@ -32,6 +33,26 @@ module ImReader
     end
 
     private
+
+    def fetch_with_redirect(uri, limit = 5)
+      raise "Too many redirects" if limit == 0
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = (uri.scheme == "https")
+      http.open_timeout = 10
+      http.read_timeout = 20
+
+      response = http.get(uri.request_uri)
+
+      case response
+      when Net::HTTPRedirection
+        new_uri = URI.parse(response["location"])
+        fetch_with_redirect(new_uri, limit - 1)
+      else
+        response
+      end
+    end
+
 
   end
 end

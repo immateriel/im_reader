@@ -1,21 +1,14 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale.to_s %>">
 <head>
-  <%= favicon_link_tag %>
 
-  <!-- Main css styles -->
-  <%= stylesheet_link_tag "reader" %>
-  <script src="<%= asset_path('jszip.min.js') %>"></script>
-  <script src="<%= asset_path('epub.min.js') %>"></script>
+  <%= stylesheet_link_tag "im_reader/reader", "data-turbo-track": "reload" %>
 
-  <!-- Main javascript files -->
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => false %>
-
-  <script src="<%= asset_path('reader.js') %>"></script>
+  <%= javascript_include_tag 'im_reader/reader', 'data-turbolinks-track' => false %>
 
   <%= yield :head %>
 
-  <title><%= Immateriel.env_title %>immatériel reader</title>
+  <title>Immatériel epub reader</title>
 
   <%= csrf_meta_tags %>
 </head>

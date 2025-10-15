@@ -1,15 +1,20 @@
+require "jquery-rails"
+
 module ImReader
   class Engine < ::Rails::Engine
     isolate_namespace ImReader
 
     initializer "im_reader.assets.precompile" do |app|
       app.config.assets.precompile += %w[
-        jszip.min.js
-        epub.min.js
-        reader.js
-        watcher.js
-        semantic-ui.js
-        reader.scss
+        im_reader/jszip.min.js
+        im_reader/epub.min.js
+        im_reader/reader.js
+        im_reader/semantic-ui.js
+        im_reader/reader.scss
+        im_reader/logo_colore.svg
+        im_reader/icons.ttf
+        im_reader/icons.woff
+        im_reader/icons.woff2
       ]
     end
 

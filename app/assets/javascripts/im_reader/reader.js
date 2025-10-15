@@ -1,11 +1,8 @@
-if ("epubReaderWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.epubReaderWorker
-            .register("/epub_reader_worker.js")
-            .then((reg) => console.log("✅ epub reader worker enregistré", reg.scope))
-            .catch((err) => console.error("❌ epubReaderWorker erreur", err));
-    });
-}
+//= require jquery
+//= require jquery_ujs
+//= require im_reader/jszip.min
+//= require im_reader/epub.min
+//= require im_reader/semantic-ui
 
 (function ($)
 {
@@ -29,7 +26,9 @@ if ("epubReaderWorker" in navigator) {
 
         if (!window.ePub) { console.error("ePub introuvable"); return; }
 
-        var book = window.ePub(bookUrl, { openAs: "epub" });
+        window.book = window.ePub(bookUrl, { openAs: "epub",
+            replacements: "blob",
+            restore: false });
 
         var rendition = book.renderTo("viewer", {
             width: "100%",
@@ -72,41 +71,65 @@ if ("epubReaderWorker" in navigator) {
             }
         });
 
-        book.ready.then(() => book.loaded.navigation).then((toc) => {
+        book.ready.then(() => Promise.all([book.loaded.navigation, book.loaded.manifest]))
+            .then(([toc, manifest]) => {
 
-
-            book.coverUrl().then((url) => {
-                if (url) {
-                    $("#cover-content").html(`
+                book.coverUrl().then((url) => {
+                    if (url) {
+                        $("#cover-content").html(`
                       <img src="${url}" alt="Couverture du livre">
                       <button id="start_button" class="ui primary button">
                         Commencer la lecture
                       </button>
                     `);
 
-                    overlay.on("click", "#start_button", () => {
+                        overlay.on("click", "#start_button", () => {
+                            overlay.remove();
+                            rendition.display();
+                        });
+                    } else {
                         overlay.remove();
                         rendition.display();
-                    });
-                } else {
-                    overlay.remove();
-                    rendition.display();
-                }
-            });
+                    }
+                });
 
-            const $toc = $("#toc");
-            toc.toc.forEach((chapter) => {
-                const $a = $("<a>")
-                    .addClass("item")
-                    .attr("href", "#")
-                    .text(chapter.label)
-                    .on("click", (e) => {
-                        e.preventDefault();
-                        rendition.display(chapter.href);
-                    });
-                $toc.append($a);
-            });
-        });
+                const $toc = $("#toc");
+
+                function normalizeHref(href) {
+                    for (const key in manifest) {
+                        const entry = manifest[key];
+                        if (
+                            entry.href.endsWith(href) ||
+                            entry.href.endsWith("x" + href) ||
+                            entry.href.endsWith("/" + href)
+                        ) {
+                            return entry.href;
+                        }
+                    }
+
+                    // Par défaut
+                    return href;
+                }
+
+                toc.toc.forEach((chapter) => {
+                    const resolvedHref = normalizeHref(chapter.href);
+
+                    $("<a>")
+                        .addClass("item")
+                        .attr("href", "#")
+                        .text(chapter.label)
+                        .on("click", (e) => {
+                            e.preventDefault();
+                            rendition
+                                .display(resolvedHref)
+                                .catch((err) => {
+                                    console.error("[im_reader] Display error:", err.message, resolvedHref);
+                                });
+                        })
+                        .appendTo($toc);
+                });
+            })
+            .catch((err) => console.error("[im_reader] TOC load error:", err));
 
         book.ready.then(() => {
             return book.locations.generate(1000);
