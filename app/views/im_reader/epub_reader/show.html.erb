@@ -1,9 +1,15 @@
-<div id="reader-root" data-book-url="<%= @url %>">
+<div id="reader-root"
+     data-book-url="<%= @url %>"
+     data-i18n='<%= {
+                      start: t("im_reader.buttons.start"),
+                      loading: t("im_reader.messages.loading"),
+                      book_cover: t("im_reader.elements.book_cover")
+                    }.to_json %>'>
   <aside class="ui vertical menu">
     <div class="item logo">
       <%= image_tag 'im_reader/logo_colore.svg', id: "logo" %>
     </div>
-    <div class="header"><%= "Table of content".t %></div>
+    <div class="header"><%= I18n.t('im_reader.elements.toc') %></div>
     <div class="menu" id="toc"></div>
   </aside>
 

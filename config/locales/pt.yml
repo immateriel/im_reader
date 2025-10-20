@@ -1,0 +1,10 @@
+pt:
+  im_reader:
+    title: "Leitor EPUB fornecido por immatériel.fr"
+    elements:
+      toc: "Índice"
+      book_cover: "Capa do livro"
+    buttons:
+      start: "Começar a leitura"
+    messages:
+      loading: "Carregando o livro..."

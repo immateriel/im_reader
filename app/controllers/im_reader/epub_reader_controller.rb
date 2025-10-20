@@ -1,5 +1,6 @@
 module ImReader
   class EpubReaderController < ApplicationController
+    before_action :set_locale
 
     def show
       @remote_url = params[:url]
@@ -53,6 +54,9 @@ module ImReader
       end
     end
 
+    def set_locale
+      I18n.locale = params[:locale] || I18n.default_locale
+    end
 
   end
 end

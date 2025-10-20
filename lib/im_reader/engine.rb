@@ -24,5 +24,9 @@ module ImReader
         include ImReader::Engine.routes.url_helpers
       end
     end
+
+    initializer 'im_reader.i18n' do |app|
+      app.config.i18n.load_path += Dir[root.join('config', 'locales', '**', '*.{rb,yml}')]
+    end
   end
 end

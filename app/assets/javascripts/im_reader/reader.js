@@ -8,10 +8,11 @@
 {
     function initReader($root)
     {
+        const i18n = $root.data("i18n");
         const overlay = $(`
             <div id="cover-overlay">
                 <div id="cover-content">
-                <p id="loading">Chargement du livre...</p>
+                <p id="loading">${i18n.loading}</p>
                 </div>
             </div>
             `);
@@ -77,10 +78,8 @@
                 book.coverUrl().then((url) => {
                     if (url) {
                         $("#cover-content").html(`
-                      <img src="${url}" alt="Couverture du livre">
-                      <button id="start_button" class="ui primary button">
-                        Commencer la lecture
-                      </button>
+                      <img src="${url}" alt="${i18n.book_cover}">
+                      <button id="start_button" class="ui primary button">${i18n.start}</button>
                     `);
 
                         overlay.on("click", "#start_button", () => {

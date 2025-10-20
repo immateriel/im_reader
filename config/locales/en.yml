@@ -1,0 +1,10 @@
+en:
+  im_reader:
+    title: "EPUB reader by immatériel.fr"
+    elements:
+      toc: "Table of content"
+      book_cover: "Book cover"
+    buttons:
+      start: "Start to Read"
+    messages:
+      loading: "Book is loading ..."
