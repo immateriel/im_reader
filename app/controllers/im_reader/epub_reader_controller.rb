@@ -8,13 +8,9 @@ module ImReader
     end
 
     def remote
-      # Envoyer cette url depuis le BO immateriel
-      # @book.book_previews&.last&.download_url
       url = params[:url]
       uri = URI.parse(url)
       response = fetch_with_redirect(uri)
-
-      # on télécharge directement en mémoire
 
       if response.is_a?(Net::HTTPSuccess)
 
