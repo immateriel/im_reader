@@ -48,7 +48,7 @@ This will expose the following route inside your application:
 ### Example usage
 
 ```
-/reader/remote?url=https://your-server.com/path/to/book.epub
+/reader/epub?url=https://your-server.com/path/to/book.epub
 ```
 
 This endpoint will download the EPUB file from the given URL, stream it securely to the client, and display it in the embedded reader.
