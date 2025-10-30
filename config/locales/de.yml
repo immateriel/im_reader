@@ -8,3 +8,4 @@ de:
       start: "Lesen beginnen"
     messages:
       loading: "Buch wird geladen..."
+      reading_error: "EPUB-Datei konnte nicht abgerufen werden"

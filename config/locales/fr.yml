@@ -8,3 +8,4 @@ fr:
       start: "Commencer la lecture"
     messages:
       loading: "Chargement du livre ..."
+      reading_error: "Impossible de récupérer l’EPUB"

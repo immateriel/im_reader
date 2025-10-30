@@ -8,3 +8,4 @@ en:
       start: "Start to Read"
     messages:
       loading: "Book is loading ..."
+      reading_error: "Unable to retrieve the EPUB"

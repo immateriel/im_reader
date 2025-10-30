@@ -19,7 +19,7 @@ module ImReader
                   type: "application/epub+zip",
                   disposition: "inline"
       else
-        render plain: "Impossible de récupérer l’EPUB", status: 404
+        render plain: I18n.t('im_reader.messages.reading_error'), status: 404
       end
     end
 
