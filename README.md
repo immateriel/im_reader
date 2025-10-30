@@ -1,7 +1,8 @@
 # im_reader
 
-**im_reader** is a mountable Ruby on Rails engine that provides an elegant in-browser EPUB reader.  
-It’s designed to integrate seamlessly into your Rails application, allowing users to read `.epub` files hosted remotely, with a built-in table of contents, cover display, and customizable UI labels.
+**im_reader** is a mountable Ruby on Rails engine that encapsulates the [`epub.js`](https://github.com/intity/epub-js) JavaScript library to provide an elegant in-browser EPUB reader.  
+It integrates [`Semantic UI`](https://github.com/Semantic-Org/Semantic-UI) for the user interface styling, offering a modern and responsive reading experience.  
+Designed to fit seamlessly into any Rails application, it allows users to read `.epub` files hosted remotely, with a built-in table of contents, cover display, and customizable UI labels.
 
 ---
 
@@ -76,6 +77,7 @@ fr:
       start: "Commencer la lecture"
     messages:
       loading: "Chargement du livre ..."
+      reading_error: "Impossible de récupérer l’EPUB"
 ```
 
 ---
@@ -108,3 +110,12 @@ http://localhost:3000/reader/epub?url=https://your-server.com/path/to/book.epub
 
 This project is distributed under the MIT License.  
 See the `LICENSE` file for more details.
+
+## Credits
+
+- **EPUB rendering:** [epub.js (Intity fork)](https://github.com/intity/epub-js)  
+  Licensed under the BSD 2-Clause License.
+- **UI framework:** [Semantic UI](https://github.com/Semantic-Org/Semantic-UI)  
+  Licensed under the MIT License.
+
+**im_reader** integrates and extends these open-source projects to provide a smooth EPUB reading experience inside Ruby on Rails.
