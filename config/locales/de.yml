@@ -7,5 +7,7 @@ de:
     buttons:
       start: "Lesen beginnen"
     messages:
+      invalid_url: "Die URL zum Lesen ist ungültig."
+      missing_url: "Die Lese-URL fehlt."
       loading: "Buch wird geladen..."
       reading_error: "EPUB-Datei konnte nicht abgerufen werden"

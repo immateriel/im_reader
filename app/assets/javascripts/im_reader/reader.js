@@ -19,17 +19,43 @@
         $("#reader-root").append(overlay);
 
         var bookUrl = $root.data("book-url");
+        if (!bookUrl) {
+            $("#cover-content").html(`<p class="ui red text">${i18n.missing_url || "URL manquante."}</p>`);
+            return;
+        }
         var theme = "light";
         var fontSize = 100;
+        fetch(bookUrl, { method: "HEAD" })
+            .then((res) => {
+                if (!res.ok) {
+                    // Si HEAD échoue, on tente GET pour récupérer le message texte
+                    return fetch(bookUrl).then(async (resp) => {
+                        const msg = await resp.text();
+                        throw new Error(msg || i18n.reading_error || "Erreur de lecture.");
+                    });
+                }
+            })
+            .then(() => startReader(bookUrl, i18n, overlay))
+            .catch((err) => {
+                console.error("[im_reader] load error:", err);
+                $("#cover-content").html(`<p class="ui red text">${err.message}</p>`);
+            });
+    }
 
+    function startReader(bookUrl, i18n, overlay) {
         var $viewer = $("#viewer"), $toc = $("#toc");
-        var $prev_button = $("#prev_button"), $next_button = $("#next_button"), $btnTheme = $("#btnTheme");
+        var $prev_button = $("#prev_button"), $next_button = $("#next_button");
 
-        if (!window.ePub) { console.error("ePub introuvable"); return; }
+        if (!window.ePub) {
+            $("#cover-content").html(`<p class="ui red text">ePub introuvable</p>`);
+            return;
+        }
 
-        window.book = window.ePub(bookUrl, { openAs: "epub",
+        window.book = window.ePub(bookUrl, {
+            openAs: "epub",
             replacements: "blob",
-            restore: false });
+            restore: false
+        });
 
         var rendition = book.renderTo("viewer", {
             width: "100%",
@@ -53,34 +79,17 @@
             if (iframe) iframe.setAttribute("sandbox", "allow-same-origin allow-scripts");
         });
 
-        $prev_button.on("click", () => {
-            rendition.prev();
-        });
-
-        $next_button.on("click", () => {
-            rendition.next();
-        });
-
-        rendition.on("relocated", (location) => {
-            if (book.locations.total > 0) {
-                const current = book.locations.locationFromCfi(location.start.cfi);
-                const total = book.locations.total;
-                let percentage = current / total;
-                if (location.atEnd) percentage = 1.0;
-
-                $('#progressBar').progress('set percent', Math.round(percentage * 100));
-            }
-        });
+        $prev_button.on("click", () => rendition.prev());
+        $next_button.on("click", () => rendition.next());
 
         book.ready.then(() => Promise.all([book.loaded.navigation, book.loaded.manifest]))
             .then(([toc, manifest]) => {
-
                 book.coverUrl().then((url) => {
                     if (url) {
                         $("#cover-content").html(`
-                      <img src="${url}" alt="${i18n.book_cover}">
-                      <button id="start_button" class="ui primary button">${i18n.start}</button>
-                    `);
+              <img src="${url}" alt="${i18n.book_cover}">
+              <button id="start_button" class="ui primary button">${i18n.start}</button>
+            `);
 
                         overlay.on("click", "#start_button", () => {
                             overlay.remove();
@@ -93,51 +102,24 @@
                 });
 
                 const $toc = $("#toc");
-
-                function normalizeHref(href) {
-                    for (const key in manifest) {
-                        const entry = manifest[key];
-                        if (
-                            entry.href.endsWith(href) ||
-                            entry.href.endsWith("x" + href) ||
-                            entry.href.endsWith("/" + href)
-                        ) {
-                            return entry.href;
-                        }
-                    }
-
-                    // Par défaut
-                    return href;
-                }
-
                 toc.toc.forEach((chapter) => {
-                    const resolvedHref = normalizeHref(chapter.href);
-
                     $("<a>")
                         .addClass("item")
                         .attr("href", "#")
                         .text(chapter.label)
                         .on("click", (e) => {
                             e.preventDefault();
-                            rendition
-                                .display(resolvedHref)
-                                .catch((err) => {
-                                    console.error("[im_reader] Display error:", err.message, resolvedHref);
-                                });
+                            rendition.display(chapter.href).catch((err) => {
+                                console.error("[im_reader] Display error:", err.message);
+                            });
                         })
                         .appendTo($toc);
                 });
             })
-            .catch((err) => console.error("[im_reader] TOC load error:", err));
-
-        book.ready.then(() => {
-            return book.locations.generate(1000);
-        }).then(() => {
-        }).catch(e => console.error("Error, book not ready", e));
-
-        rendition.on("displayError", (e)=> console.error("Error on display", e));
-
-        rendition.display().catch(e=>console.error("Error while rendering book", e));
+            .catch((err) => {
+                console.error("[im_reader] TOC load error:", err);
+                $("#cover-content").html(`<p class="ui red text">${i18n.reading_error || "Erreur de lecture du livre."}</p>`);
+            });
     }
 
     $(function(){ var $root = $("#reader-root"); if ($root.length) initReader($root); });

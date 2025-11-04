@@ -7,5 +7,7 @@ pt:
     buttons:
       start: "Começar a leitura"
     messages:
+      invalid_url: "O URL para leitura é inválido."
+      missing_url: "O URL de leitura está em falta."
       loading: "Carregando o livro..."
       reading_error: "Não foi possível recuperar o EPUB."

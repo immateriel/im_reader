@@ -8,12 +8,14 @@ module ImReader
     end
 
     def remote
-      url = params[:url]
-      uri = URI.parse(url)
+      raw_url = params[:url].to_s.strip
+      return render plain: I18n.t('im_reader.messages.missing_url'), status: 400 if raw_url.empty?
+      uri = parse_uri(raw_url)
+      return render plain: I18n.t('im_reader.messages.invalid_url'), status: 400 unless uri
+
       response = fetch_with_redirect(uri)
 
       if response.is_a?(Net::HTTPSuccess)
-
         send_data response.body,
                   filename: File.basename(uri.path.presence || "remote.epub"),
                   type: "application/epub+zip",
@@ -24,6 +26,24 @@ module ImReader
     end
 
     private
+
+    def parse_uri(value)
+      raw = value.to_s.strip
+      return nil if raw.empty?
+
+      candidates = [raw, CGI.unescape(raw)].uniq
+
+      candidates.each do |c|
+        begin
+          uri = URI.parse(c)
+          return uri if uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+        rescue URI::InvalidURIError, URI::InvalidComponentError
+          next
+        end
+      end
+
+      nil
+    end
 
     def fetch_with_redirect(uri, limit = 5)
       raise "Too many redirects" if limit == 0
