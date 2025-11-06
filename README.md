@@ -76,8 +76,11 @@ fr:
     buttons:
       start: "Commencer la lecture"
     messages:
+      invalid_url: "L'url de lecture est invalide."
+      missing_url: "L'url de lecture est manquante."
       loading: "Chargement du livre ..."
       reading_error: "Impossible de récupérer l’EPUB"
+      timeout_error: "Erreur de connexion : veuillez recharger la page."
 ```
 
 ---
@@ -87,7 +90,7 @@ fr:
 To work on the gem locally:
 
 ```bash
-git clone https://github.com/your-org/im_reader.git
+git clone https://github.com/immateriel/im_reader.git
 cd im_reader
 bundle install
 ```
