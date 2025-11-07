@@ -11,3 +11,4 @@ es:
       missing_url: "Falta la URL de lectura."
       loading: "Cargando el libro..."
       reading_error: "No se pudo recuperar el EPUB"
+      timeout_error: "Error de conexión: por favor, recargue la página."

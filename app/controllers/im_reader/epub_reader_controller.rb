@@ -13,7 +13,11 @@ module ImReader
       uri = parse_uri(raw_url)
       return render plain: I18n.t('im_reader.messages.invalid_url'), status: 400 unless uri
 
-      response = fetch_with_redirect(uri)
+      begin
+        response = fetch_with_redirect(uri)
+      rescue Net::OpenTimeout, Net::ReadTimeout
+        return render plain: I18n.t('im_reader.messages.timeout_error'), status: 504
+      end
 
       if response.is_a?(Net::HTTPSuccess)
         send_data response.body,

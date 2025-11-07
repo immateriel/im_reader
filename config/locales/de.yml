@@ -11,3 +11,4 @@ de:
       missing_url: "Die Lese-URL fehlt."
       loading: "Buch wird geladen..."
       reading_error: "EPUB-Datei konnte nicht abgerufen werden"
+      timeout_error: "Verbindungsfehler: Bitte laden Sie die Seite neu."
