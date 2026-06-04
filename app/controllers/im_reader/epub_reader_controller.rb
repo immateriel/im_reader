@@ -1,5 +1,7 @@
 module ImReader
   class EpubReaderController < ApplicationController
+    include ActiveSupport::Configurable
+
     before_action :set_locale
 
     def show
@@ -12,6 +14,8 @@ module ImReader
       return render plain: I18n.t('im_reader.messages.missing_url'), status: 400 if raw_url.empty?
       uri = parse_uri(raw_url)
       return render plain: I18n.t('im_reader.messages.invalid_url'), status: 400 unless uri
+
+      return render plain: I18n.t('im_reader.messages.unauthorized_url'), status: 403 if ImReader::Engine.config.url_authorized_regexp && !uri.to_s.match(ImReader::Engine.config.url_authorized_regexp)
 
       begin
         response = fetch_with_redirect(uri)
