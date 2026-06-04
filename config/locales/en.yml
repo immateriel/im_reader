@@ -9,6 +9,7 @@ en:
     messages:
       invalid_url: "The URL provide is invalid."
       missing_url: "The reading URL is missing."
+      unauthorized_url: "The URL is not authorized."
       loading: "Book is loading ..."
       reading_error: "Unable to retrieve the EPUB"
       timeout_error: "Connection error: please reload the page."

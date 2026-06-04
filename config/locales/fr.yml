@@ -7,8 +7,9 @@ fr:
     buttons:
       start: "Commencer la lecture"
     messages:
-      invalid_url: "L'url de lecture est invalide."
-      missing_url: "L'url de lecture est manquante."
+      invalid_url: "L'URL de lecture est invalide."
+      missing_url: "L'URL de lecture est manquante."
+      unauthorized_url: "L'URL n'est pas autorisée."
       loading: "Chargement du livre ..."
       reading_error: "Impossible de récupérer l’EPUB"
       timeout_error: "Erreur de connexion : veuillez recharger la page."
