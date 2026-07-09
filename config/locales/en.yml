@@ -7,7 +7,7 @@ en:
     buttons:
       start: "Start to Read"
     messages:
-      invalid_url: "The URL provide is invalid."
+      invalid_url: "The provided URL is invalid."
       missing_url: "The reading URL is missing."
       unauthorized_url: "The URL is not authorized."
       loading: "Book is loading ..."

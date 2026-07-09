@@ -44,7 +44,7 @@ module ImReader
       candidates.each do |c|
         begin
           uri = URI.parse(c)
-          return uri if uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
+          return uri if uri.port.in? [80, 443]
         rescue URI::InvalidURIError, URI::InvalidComponentError
           next
         end
